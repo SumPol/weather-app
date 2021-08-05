@@ -7,29 +7,40 @@ import {
   Text,
   Image,
   View,
+  Alert,
 } from 'react-native';
 import ModalCityList from '../modalCityList';
+import {currentWeather} from '../../api/weather';
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isOpenCityList: false};
+    this.state = {isOpenCityList: false, temperature: ''};
+    this.getWeather();
   }
 
+  getWeather = async () => {
+    try {
+      const res = await currentWeather({city: 'London'});
+      this.setState({temperature: res.main.temp});
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Сервер временно не доступен 😞');
+    }
+  };
+
   handleOpenModal = () => {
-    console.log('Messege');
     this.setState({isOpenCityList: true});
   };
 
   handleCloseModal = () => {
-    console.log('Messege');
     this.setState({isOpenCityList: false});
   };
 
   render() {
     const isDarkMode = true;
 
-    console.log('Main', this, this.state.isOpenCityList);
+    //console.log('Main', this, this.state.isOpenCityList);
     return (
       <SafeAreaView style={styles.backgroundStyle}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -47,8 +58,14 @@ class Main extends React.Component {
             style={styles.weatherImage}
             source={require('../../assets/images/cat_image.gif')}
           />
-          <Text style={styles.timeText}>Сейчас</Text>
-          <Text style={styles.temperatureText}>+21 С</Text>
+          {this.state.temperature !== '' ? (
+            <>
+              <Text style={styles.timeText}>Сейчас</Text>
+              <Text style={styles.temperatureText}>
+                {this.state.temperature} ℃
+              </Text>
+            </>
+          ) : null}
         </View>
 
         <ModalCityList
