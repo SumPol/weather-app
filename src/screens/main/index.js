@@ -13,23 +13,23 @@ import ModalCityList from '../modalCityList';
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {isOpenCityList: false};
   }
 
   handleOpenModal = () => {
     console.log('Messege');
-    this.setState({isOpen: true});
+    this.setState({isOpenCityList: true});
   };
 
   handleCloseModal = () => {
     console.log('Messege');
-    this.setState({isOpen: false});
+    this.setState({isOpenCityList: false});
   };
 
   render() {
     const isDarkMode = true;
 
-    console.log('Main', this, this.state.isOpen);
+    console.log('Main', this, this.state.isOpenCityList);
     return (
       <SafeAreaView style={styles.backgroundStyle}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -52,7 +52,7 @@ class Main extends React.Component {
         </View>
 
         <ModalCityList
-          isOpenValue={this.state.isOpen}
+          isOpenValue={this.state.isOpenCityList}
           onClose={this.handleCloseModal}
         />
       </SafeAreaView>
