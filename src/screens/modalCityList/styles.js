@@ -4,6 +4,7 @@ import colors from '../../assets/colorThemes';
 const styles = StyleSheet.create({
   backgroundStyle: {
     flex: 1,
+    // backgroundColor: colors.backgrond,
   },
   content: {
     flex: 1,
@@ -28,6 +29,8 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     resizeMode: 'contain',
+  },
+  crossButton: {
     position: 'absolute',
     right: 5,
   },

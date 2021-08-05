@@ -8,16 +8,35 @@ import {
   Image,
   View,
 } from 'react-native';
+import ModalCityList from '../modalCityList';
 
 class Main extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isOpen: false};
+  }
+
+  handleOpenModal = () => {
+    console.log('Messege');
+    this.setState({isOpen: true});
+  };
+
+  handleCloseModal = () => {
+    console.log('Messege');
+    this.setState({isOpen: false});
+  };
+
   render() {
     const isDarkMode = true;
 
+    console.log('Main', this, this.state.isOpen);
     return (
       <SafeAreaView style={styles.backgroundStyle}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <View style={styles.content}>
-          <TouchableOpacity style={styles.location}>
+          <TouchableOpacity
+            style={styles.location}
+            onPress={this.handleOpenModal}>
             <Text style={styles.cityText}>Санкт-Петербург</Text>
             <Image
               style={styles.locationImage}
@@ -31,6 +50,11 @@ class Main extends React.Component {
           <Text style={styles.timeText}>Сейчас</Text>
           <Text style={styles.temperatureText}>+21 С</Text>
         </View>
+
+        <ModalCityList
+          isOpenValue={this.state.isOpen}
+          onClose={this.handleCloseModal}
+        />
       </SafeAreaView>
     );
   }
