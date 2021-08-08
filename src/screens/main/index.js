@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './styles';
+import colors from '../../assets/colorThemes';
 import {
+  ActivityIndicator,
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
@@ -25,7 +27,7 @@ class Main extends React.Component {
       this.setState({temperature: res.main.temp});
     } catch (error) {
       console.error(error);
-      Alert.alert('Сервер временно не доступен 😞');
+      Alert.alert('Сервер временно недоступен 😞');
     }
   };
 
@@ -65,7 +67,9 @@ class Main extends React.Component {
                 {this.state.temperature} ℃
               </Text>
             </>
-          ) : null}
+          ) : (
+            <ActivityIndicator size="large" color={colors.main} />
+          )}
         </View>
 
         <ModalCityList
