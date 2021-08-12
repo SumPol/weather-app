@@ -17,7 +17,11 @@ import {currentWeather} from '../../api/weather';
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isOpenCityList: false, temperature: ''};
+    this.state = {
+      isOpenCityList: false,
+      temperature: '',
+      currentCityObject: {},
+    };
     this.getWeather();
   }
 
@@ -39,10 +43,15 @@ class Main extends React.Component {
     this.setState({isOpenCityList: false});
   };
 
+  setCurrentCityObject = element => {
+    this.setState({currentCityObject: element});
+    this.handleCloseModal();
+  };
+
   render() {
     const isDarkMode = true;
 
-    //console.log('Main', this, this.state.isOpenCityList);
+    //console.log('Main', this, this.state);
     return (
       <SafeAreaView style={styles.backgroundStyle}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -50,7 +59,11 @@ class Main extends React.Component {
           <TouchableOpacity
             style={styles.location}
             onPress={this.handleOpenModal}>
-            <Text style={styles.cityText}>Санкт-Петербург</Text>
+            <Text style={styles.cityText}>
+              {!this.state.currentCityObject.city
+                ? 'Выберите город'
+                : this.state.currentCityObject.city}
+            </Text>
             <Image
               style={styles.locationImage}
               source={require('../../assets/images/location_image.png')}
@@ -75,6 +88,7 @@ class Main extends React.Component {
         <ModalCityList
           isOpenValue={this.state.isOpenCityList}
           onClose={this.handleCloseModal}
+          onPressCity={this.setCurrentCityObject}
         />
       </SafeAreaView>
     );

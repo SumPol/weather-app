@@ -35,6 +35,9 @@ class ModalCityList extends React.Component {
   renderCity = element => {
     return (
       <TouchableOpacity
+        onPress={() => {
+          this.props.onPressCity(element);
+        }}
         key={element.city + element.region}
         style={styles.cityText}>
         {
