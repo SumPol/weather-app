@@ -14,7 +14,8 @@ import {
   View,
 } from 'react-native';
 
-class ModalCityList extends React.Component {
+/** Модальный экран со списком городов */
+class ModalCityScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +24,7 @@ class ModalCityList extends React.Component {
     };
   }
 
+  /** Поиск городов по вхождению строки, сохранение списка найденных городов в state */
   searchCity = textCity => {
     const cities = getCityList({searchString: textCity});
     if (textCity.replace(/\s+/g, '').length > 1) {
@@ -32,29 +34,29 @@ class ModalCityList extends React.Component {
     }
   };
 
-  renderCity = element => {
+  /** Вывести строку с информацией о городе (город, тип региона, регион) */
+  renderCity = cityObject => {
     return (
       <TouchableOpacity
         onPress={() => {
-          this.props.onPressCity(element);
+          this.props.onPressCity(cityObject);
         }}
-        key={element.city + element.region}
+        key={cityObject.city + cityObject.region}
         style={styles.cityText}>
-        {
-          <Text numberOfLines={1} style={styles.cityText}>
-            {element.city}{' '}
-            <Text
-              ellipsizeMode={'tail'}
-              numberOfLines={1}
-              style={styles.regionText}>
-              {element.region_type} {element.region}
-            </Text>
+        <Text numberOfLines={1} style={styles.cityText}>
+          {cityObject.city}{' '}
+          <Text
+            ellipsizeMode={'tail'}
+            numberOfLines={1}
+            style={styles.regionText}>
+            {cityObject.region_type} {cityObject.region}
           </Text>
-        }
+        </Text>
       </TouchableOpacity>
     );
   };
 
+  /** Закрыть модальное окно и очистить в state список городов */
   closeModal = () => {
     const onClose = this.props.onClose;
     onClose();
@@ -116,4 +118,4 @@ class ModalCityList extends React.Component {
   }
 }
 
-export default ModalCityList;
+export default ModalCityScreen;

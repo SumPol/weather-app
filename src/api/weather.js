@@ -3,9 +3,10 @@ import cityList from './mockups/cityList.json';
 
 /** Получить данные о погоде в этом городе */
 const currentWeather = async arg => {
-  const city = arg.city;
+  const lat = arg.lat;
+  const lon = arg.lon;
   const res = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`,
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`,
   );
   return await res.json();
 };

@@ -11,47 +11,69 @@ import {
   View,
   Alert,
 } from 'react-native';
-import ModalCityList from '../modalCityList';
-import {currentWeather} from '../../api/weather';
+import ModalCityScreen from '../modalCityScreen';
+import * as api from '../../api/weather';
 
-class Main extends React.Component {
+/** Главный экран */
+class MainScreen extends React.Component {
+  /** Вызывается 1 раз в моент создания компонента Main - главвного экрана */
   constructor(props) {
     super(props);
     this.state = {
       isOpenCityList: false,
       temperature: '',
       currentCityObject: {},
+      weatherObject: {},
     };
-    this.getWeather();
+    //this.getWeather();
   }
 
-  getWeather = async () => {
+  /** Получить текущую температуру в городе, сохранить ее в state */
+  getWeather = async cityObject => {
+    console.log('getWeather', cityObject);
     try {
-      const res = await currentWeather({city: 'London'});
-      this.setState({temperature: res.main.temp});
+      const lat = cityObject.geo_lat;
+      const lon = cityObject.geo_lon;
+      const arg = {lat, lon};
+
+      const res = await api.currentWeather(arg);
+      console.log('getWeather res', res);
+      this.setState({
+        weatherObject: {
+          clouds: res.clouds,
+          main: res.main,
+          rain: res.rain || {},
+          weather: res.weather,
+          wind: res.wind,
+        },
+      });
     } catch (error) {
       console.error(error);
       Alert.alert('Сервер временно недоступен 😞');
     }
   };
 
+  /** Открыть модальное окно */
   handleOpenModal = () => {
     this.setState({isOpenCityList: true});
   };
 
+  /** Закрыть модальное окно */
   handleCloseModal = () => {
     this.setState({isOpenCityList: false});
   };
 
-  setCurrentCityObject = element => {
-    this.setState({currentCityObject: element});
+  /** Сохранить в state выбранный город и сделать запрос на погоду в этом городе */
+  setCurrentCityObject = cityObject => {
+    this.setState({currentCityObject: cityObject});
+    this.getWeather(cityObject);
     this.handleCloseModal();
   };
 
   render() {
     const isDarkMode = true;
 
-    //console.log('Main', this, this.state);
+    console.log('Main', this, this.state);
     return (
       <SafeAreaView style={styles.backgroundStyle}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -73,11 +95,11 @@ class Main extends React.Component {
             style={styles.weatherImage}
             source={require('../../assets/images/cat_image.gif')}
           />
-          {this.state.temperature !== '' ? (
+          {this.state.weatherObject?.main ? (
             <>
               <Text style={styles.timeText}>Сейчас</Text>
               <Text style={styles.temperatureText}>
-                {this.state.temperature} ℃
+                {this.state.weatherObject.main.temp} ℃
               </Text>
             </>
           ) : (
@@ -85,7 +107,7 @@ class Main extends React.Component {
           )}
         </View>
 
-        <ModalCityList
+        <ModalCityScreen
           isOpenValue={this.state.isOpenCityList}
           onClose={this.handleCloseModal}
           onPressCity={this.setCurrentCityObject}
@@ -95,4 +117,4 @@ class Main extends React.Component {
   }
 }
 
-export default Main;
+export default MainScreen;
