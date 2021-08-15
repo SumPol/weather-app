@@ -38,6 +38,7 @@ class MainScreen extends React.Component {
 
       const res = await api.currentWeather(arg);
       console.log('getWeather res', res);
+
       this.setState({
         weatherObject: {
           clouds: res.clouds,
@@ -45,6 +46,7 @@ class MainScreen extends React.Component {
           rain: res.rain || {},
           weather: res.weather,
           wind: res.wind,
+          snow: res.snow || {},
         },
       });
     } catch (error) {
